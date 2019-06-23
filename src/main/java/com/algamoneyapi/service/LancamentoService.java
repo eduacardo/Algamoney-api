@@ -6,19 +6,21 @@ import org.springframework.stereotype.Service;
 import com.algamoneyapi.model.Lancamento;
 import com.algamoneyapi.model.Pessoa;
 import com.algamoneyapi.repository.LancamentoRepository;
+import com.algamoneyapi.repository.PessoasRepository;
 import com.algamoneyapi.service.exception.PessoaInativaouInexistenteExeption;
 
 @Service
 public class LancamentoService {
 	
 	@Autowired
-	private PessoaService pessoaService;
+	private PessoasRepository pessoaRepositiry;
+	
 	@Autowired
 	private LancamentoRepository lancamentoRepository;
 
 	public Lancamento salvar(Lancamento lancamento) {
 		
-		Pessoa pessoa = pessoaService.buscarPessoaPeloCodigo(lancamento.getPessoa().getCodigo());
+		Pessoa pessoa = pessoaRepositiry.findOne(lancamento.getPessoa().getCodigo());
 		
 		if (pessoa == null || pessoa.isInativo()) {
 			

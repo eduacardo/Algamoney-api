@@ -31,17 +31,16 @@ public class CategoriaResource {
 	private ApplicationEventPublisher publisher;
 
 	@GetMapping
-	public List<Categoria> listar() {
-		return categoriasRepository.findAll();
+	public  ResponseEntity<List<Categoria>> listar() {		
+		List<Categoria> categorias = categoriasRepository.findAll();
+		return new ResponseEntity<List<Categoria>>(categorias, HttpStatus.OK);
 	}
 
 	@PostMapping
 	public ResponseEntity<Categoria> criar(@Valid @RequestBody Categoria categoria, HttpServletResponse response) {
-
 		Categoria categoriaSalva = categoriasRepository.save(categoria);
 		publisher.publishEvent(new RecursoCriadoEvent(this, response, categoria.getCodigo()));
 		return ResponseEntity.status(HttpStatus.CREATED).body(categoriaSalva);
-
 	}
 
 	@GetMapping("/{codigo}")
